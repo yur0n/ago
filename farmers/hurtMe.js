@@ -37,7 +37,8 @@ async function job(id) {
 		if (gameStatus) {
 			status = true;
 		}
-		await new Promise(res => setTimeout(res, 2000));
+		return false;
+		// await new Promise(res => setTimeout(res, 2000));
 	}
 	return status;
 }
