@@ -11,11 +11,11 @@ async function work(id) {
 	await new Promise(res => setTimeout(res, 10_000))
 	miner(id);
 	await new Promise(res => setTimeout(res, 30_000))
-	// mineGames(id);
-	// await new Promise(res => setTimeout(res, 30_000))
-	// playHurtMe(id);
-	// await new Promise(res => setTimeout(res, 30_000))
-	// daily(id);
+	mineGames(id);
+	await new Promise(res => setTimeout(res, 30_000))
+	playHurtMe(id);
+	await new Promise(res => setTimeout(res, 30_000))
+	daily(id);
 }
 
 async function init() {
