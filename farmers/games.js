@@ -45,7 +45,7 @@ export default async function mineGames(id) {
       await new Promise(res => setTimeout(res, waitTime));
     } else {
 			if (lastTime) {
-				const awaitTime = waitTime - (Date.now() - lastTime);
+				const awaitTime = waitTime - (Date.now() - lastTime * 1000);
 				await new Promise(res => setTimeout(res, awaitTime));
 			} else {
 				await new Promise(res => setTimeout(res, retry));

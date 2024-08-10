@@ -36,7 +36,7 @@ export default async function daily(id) {
 					await new Promise(res => setTimeout(res, retry));
 				}
 			} else {
-        const timeForDaily = res.data.available_at - Date.now() + retry;
+        const timeForDaily = res.data.available_at * 1000 - Date.now() + retry;
 				await new Promise(res => setTimeout(res, timeForDaily));
 			}
 		} else {
