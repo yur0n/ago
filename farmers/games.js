@@ -28,7 +28,7 @@ async function job(id) {
 		const { status, error } = await playGame(user, games[i]);
 		if (!status) {
 			const lastTime = error.data?.last_reward;
-			return { status: false, awaitTime: lastTime }
+			return { status: false, lastTime: lastTime }
 		}
 		await new Promise(res => setTimeout(res, 2000));
 	}
