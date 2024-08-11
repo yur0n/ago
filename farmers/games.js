@@ -9,33 +9,29 @@ async function playGame(user, game_id) {
 		data: { game_id, user_id },
 		auth: token
 	};
-	const res = await apiPost(config)
-	if (res.status) {
-		console.log(user.username, 'game', game_id, 'done!')
-	} else {
-		console.log(user.username, ':');
-		console.log(res.error);
-	}
-
-	return { status: res.status, error: res.error};
+	return apiPost(config);
 }
 
 async function job(id) {
 	const user = await User.findOne({ id });
-	const games = [1,2,3,4,5,6]
+	const games = [1,2,3,4,5]
 
 	for (let i = 0; i < games.length; i++) {
 		const { status, error } = await playGame(user, games[i]);
 		if (!status) {
+			console.log(user.username, ':');
+			console.log(error);
 			const lastTime = error.data?.last_reward;
 			return { status: false, lastTime: lastTime }
+		} else {
+			console.log(user.username, 'game', i, 'done!')
 		}
 		await new Promise(res => setTimeout(res, 2000));
 	}
 	return { status: true };
 }
 
-export default async function mineGames(id) {
+export default async function mineGames({ id }) {
   const waitTime = 12 * 60 * 60 * 1000 + 2 * 60 * 1000; // 12hours 2minutes
   const retry = 2 * 60 * 1000; // 2minutes
   while (true) {

@@ -6,22 +6,22 @@ import auth from "./auth.js";
 import { CronJob } from 'cron';
 import { User } from "./db.js";
 
-async function work(id) {
-	auth(id)
+async function work(user) {
+	auth(user)
 	await new Promise(res => setTimeout(res, 10_000))
-	miner(id);
+	miner(user);
 	await new Promise(res => setTimeout(res, 30_000))
-	mineGames(id);
+	mineGames(user);
 	await new Promise(res => setTimeout(res, 30_000))
-	playHurtMe(id);
+	playHurtMe(user);
 	await new Promise(res => setTimeout(res, 30_000))
-	daily(id);
+	daily(user);
 }
 
 async function init() {
 	const existingUsers = await User.find({});
 	for (const user of existingUsers) {
-		work(user.id);
+		work(user);
 		user.isNew = false;
 		user.save();
 		await new Promise(res => setTimeout(res, 10_000))
@@ -33,7 +33,7 @@ async function checkForNewUsers() {
   const newUsers = await User.find({ isNew: true });
 
   for (const user of newUsers) {
-    work(user.id);
+    work(user);
 		user.isNew = false;
 		user.save();
 		await new Promise(res => setTimeout(res, 10_000))

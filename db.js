@@ -9,22 +9,12 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		default: 'token'
 	},
-	hurtMeLevel: {
-		type: Number,
-		default: 1
-	},
 	isNew: {
 		type: Boolean,
 		default: true
 	}
 });
 
-const hurtMeLevelSchema = new mongoose.Schema({
-	level: Number,
-	reward: Number
-});
-
-const HurtMeLevel = mongoose.model('HurtMeLevel', hurtMeLevelSchema);
 const User = mongoose.model('User', userSchema);
 
-export { User, HurtMeLevel }
+export { User }

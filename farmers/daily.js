@@ -1,25 +1,7 @@
 import { apiPost, apiGet } from '../api.js';
 import { User } from '../db.js';
 
-async function job(user, day) {
-  const token = user.token;
-  const config = {
-		url: 'https://ago-api.hexacore.io/api/daily-checkin',
-		data: { day },
-		auth: token
-	};
-  const res = await apiPost(config)
-	if (res.status) {
-    console.log(user.username, 'daily done!');
-	} else {
-    console.log(user.username, ':');
-		console.log(res.error);
-	}
-
-	return res.status;
-}
-
-export default async function daily(id) {
+export default async function daily({ id, username }) {
   const waitTime =  60 * 60 * 1000 + 2 * 60 * 1000; // 24hours 2minutes
   const retry = 2 * 60 * 1000; // 2minutes
 
@@ -29,10 +11,18 @@ export default async function daily(id) {
 		if (res.data) {
 			if (res.data.is_available) {
         const day = res.data.next
-				const status = await job(user, day);
+        const config = {
+          url: 'https://ago-api.hexacore.io/api/daily-checkin',
+          data: { day },
+          auth: user.token
+        };
+				const { status, error } = await apiPost(config)
 				if (status) {
+          console.log(username, 'daily done!');
 					await new Promise(res => setTimeout(res, waitTime));
 				} else {
+          console.log(username, ':');
+          console.log(error);
 					await new Promise(res => setTimeout(res, retry));
 				}
 			} else {

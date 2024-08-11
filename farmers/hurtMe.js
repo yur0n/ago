@@ -1,10 +1,6 @@
 import { apiPost } from '../api.js';
-import { User, HurtMeLevel } from '../db.js';
 
-async function playGame(id) {
-  const user = await User.findOne({ id });
-  const level = user.hurtMeLevel;
-	const { reward } = await HurtMeLevel.find({ level })
+async function playGame(id, level, reward) {
 	const config = {
 		url: 'https://hurt-me-please-server.hexacore.io/game/event',
 		data: {  
@@ -17,45 +13,48 @@ async function playGame(id) {
 		auth: id
 	};
 
-	const res = await apiPost(config)
-	if (res.status) {
-		console.log(user.username, 'hurtme', level, 'done!')
-		user.hurtMeLevel = level + 1;
-		await user.save();
-	} else {
-		console.log(user.username, ':');
-		console.log(res.error);
-	}
-
-	return res.status;
+	return apiPost(config)
 }
 
-async function job(id) {
-	let status = false;
-	for (let i = 0; i < 5; i++) {
-		const gameStatus = await playGame(id);
-		if (gameStatus) {
-			status = true;
+async function job(id, currLevel, levels, levelsToComplete, username) {
+	let level = currLevel;
+	for (let i = 0; i < levelsToComplete; i++) {
+		const reward = levels[level].boostedAgoReward;
+		const { status, error } = await playGame(id, level, reward);
+		if (status) {
+			console.log(username, 'hurtme', level, 'done!');
+			level++;
+			await new Promise(res => setTimeout(res, 2000));
 		} else {
+			console.log(username, ':');
+			console.log(error);
 			return false;
 		}
-		await new Promise(res => setTimeout(res, 2000));
 	}
-	return status;
+	return true;
 }
 
-export default async function playHurtMe(id) {
-  const waitTime = 3 * 60 * 60 * 1000 + 2 * 60 * 1000; // 3hours 2minutes
-  const retry = 2 * 60 * 1000; // 2minutes
-	const thirtyMins = 30 * 60 * 1000;
+export default async function playHurtMe({ id, username }) {
+	const twoMins = 2 * 60 * 1000; // 2minutes
 
   while (true) {
-    const status = await job(id);
-
-    if (status) {
-      await new Promise(res => setTimeout(res, waitTime));
-    } else {
-      await new Promise(res => setTimeout(res, thirtyMins));
-    }
+		const res = await apiGet({ url: 'https://hurt-me-please-server.hexacore.io/game/start', auth: id });
+		if (res.data) {
+			const data = res.data;
+			const freeLevels = data.gameConfig.freeSessionGameLevelsMaxCount;
+			const currLevel = data.playerState.currentGameLevel + 1;
+			const resetTime = data.playerState.sessionGameLevelsCountResetTimestamp * 1000;
+			const levels = data.gameConfig.gameLevels;
+			const levelsToComplete = freeLevels - res.data.playerState.sessionCompletedGameLevelsCount
+			if (levelsToComplete > 0) {
+				const status = await job(id, currLevel, levels, levelsToComplete, username);
+				if (!status) {
+					await new Promise(res => setTimeout(res, twoMins));
+				} 
+			} else {
+				const waitTime = resetTime - (Date.now() + twoMins)
+				await new Promise(res => setTimeout(res, waitTime));
+			}
+		}
   }
 }
