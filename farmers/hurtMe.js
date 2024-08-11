@@ -3,14 +3,14 @@ import { User, HurtMeLevel } from '../db.js';
 
 async function playGame(id) {
   const user = await User.findOne({ id });
-  const hurtMeLevel = user.hurtMeLevel;
-	const { reward } = await HurtMeLevel.find({ level: hurtMeLevel })
+  const level = user.hurtMeLevel;
+	const { reward } = await HurtMeLevel.find({ level })
 	const config = {
 		url: 'https://hurt-me-please-server.hexacore.io/game/event',
 		data: {  
 			agoClaimed: reward, 
 			boosted: true, 
-			level: hurtMeLevel, 
+			level: level, 
 			transactionId: null, 
 			type: "EndGameLevelEvent"
 		},
@@ -19,8 +19,8 @@ async function playGame(id) {
 
 	const res = await apiPost(config)
 	if (res.status) {
-		console.log(user.username, 'hurtme', hurtMeLevel, 'done!')
-		user.hurtMeLevel = hurtMeLevel + 1;
+		console.log(user.username, 'hurtme', level, 'done!')
+		user.hurtMeLevel = level + 1;
 		await user.save();
 	} else {
 		console.log(user.username, ':');
