@@ -36,9 +36,10 @@ async function job(id) {
 		const gameStatus = await playGame(id);
 		if (gameStatus) {
 			status = true;
+		} else {
+			return false;
 		}
-		return false;
-		// await new Promise(res => setTimeout(res, 2000));
+		await new Promise(res => setTimeout(res, 2000));
 	}
 	return status;
 }
@@ -46,7 +47,7 @@ async function job(id) {
 export default async function playHurtMe(id) {
   const waitTime = 3 * 60 * 60 * 1000 + 2 * 60 * 1000; // 3hours 2minutes
   const retry = 2 * 60 * 1000; // 2minutes
-	const oneHour = 60 * 60 * 1000;
+	const thirtyMins = 30 * 60 * 1000;
 
   while (true) {
     const status = await job(id);
@@ -54,7 +55,7 @@ export default async function playHurtMe(id) {
     if (status) {
       await new Promise(res => setTimeout(res, waitTime));
     } else {
-      await new Promise(res => setTimeout(res, oneHour));
+      await new Promise(res => setTimeout(res, thirtyMins));
     }
   }
 }
