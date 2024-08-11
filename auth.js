@@ -20,7 +20,8 @@ export default async function auth({ id, username }) {
 			const res = await axios(config)
 			if (res.status == 200) {
 				console.log(username, 'authed!')
-				User.findOneAndUpdate({ id }, { token: res.data.token })
+				const user1 = await User.findOneAndUpdate({ id }, { token: res.data.token })
+				console.log(user1)
 				await new Promise(res => setTimeout(res, waitTime));
 			} else {
 				console.log(username, 'ERROR in response: ');
