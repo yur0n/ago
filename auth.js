@@ -6,7 +6,6 @@ function getRandomNumber(min, max) {
 }
 
 export default async function auth({ id, username }) {
-	console.log(id, username)
   const waitTime = getRandomNumber(60, 120) * 60 * 1000 + 2 * 60 * 1000; // 1-2hours 2minutes
   const retry = 2 * 60 * 1000; // 2minutes
 
