@@ -1,4 +1,4 @@
-import { apiPost } from '../api.js';
+import { apiPost, apiGet } from '../api.js';
 
 async function playGame(id, level, reward) {
 	const config = {
