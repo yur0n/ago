@@ -55,6 +55,9 @@ export default async function playHurtMe({ id, username }) {
 				const waitTime = resetTime - (Date.now() + twoMins)
 				await new Promise(res => setTimeout(res, waitTime));
 			}
+		} else {
+			console.log(res.error)
+			await new Promise(res => setTimeout(res, twoMins));
 		}
   }
 }
