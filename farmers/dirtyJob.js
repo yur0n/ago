@@ -21,8 +21,10 @@ async function job(id, currLevel, freeLevels, username) {
 			level++;
 			await new Promise(res => setTimeout(res, 2000));
 		} else {
-			console.log(username, ':');
-			console.log(error);
+			if (error.data.message !== 'Session completed game levels count exceeded and reset time is not reached') {
+				console.log(username, 'dirtyJob', ':');
+				console.log(error);
+			}
 			return;
 		}
 	}
