@@ -24,10 +24,9 @@ async function job(id, currLevel, levels, freeLevels, username) {
 		} else {
 			console.log(username, ':');
 			console.log(error);
-			return false;
+			return;
 		}
 	}
-	return true;
 }
 
 export default async function playHurtMe({ id, username }) {
@@ -43,10 +42,8 @@ export default async function playHurtMe({ id, username }) {
 			const levels = data.gameConfig.gameLevels;
 
 			const waitTime = resetTime - (Date.now() + twoMins)
-			const status = await job(id, currLevel, levels, freeLevels, username);
-			if (!status) {
-				await new Promise(res => setTimeout(res, waitTime));
-			}
+			await job(id, currLevel, levels, freeLevels, username);
+			await new Promise(res => setTimeout(res, waitTime));
 			
 		} else {
 			console.log(res.error)

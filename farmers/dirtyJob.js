@@ -1,7 +1,6 @@
 import { apiPost, apiGet } from '../api.js';
 
 async function job(id, currLevel, freeLevels, username) {
-	let jobDone = false;
 	let level = currLevel;
 	for (let i = 0; i < freeLevels; i++) {
 		const config = {
@@ -20,7 +19,6 @@ async function job(id, currLevel, freeLevels, username) {
 		if (status) {
 			console.log(username, 'dirtyJob', level, 'done!');
 			level++;
-			jobDone = true;
 			await new Promise(res => setTimeout(res, 2000));
 		} else {
 			console.log(username, ':');
@@ -28,7 +26,6 @@ async function job(id, currLevel, freeLevels, username) {
 			return;
 		}
 	}
-	return jobDone;
 }
 
 export default async function playDirtyJob({ id, username }) {
@@ -43,10 +40,8 @@ export default async function playDirtyJob({ id, username }) {
 			const resetTime = data.playerState.sessionGameLevelsCountResetTimestamp * 1000;
 
 			const waitTime = resetTime - (Date.now() + twoMins)
-			const status = await job(id, currLevel, freeLevels, username);
-			if (!status) {
-				await new Promise(res => setTimeout(res, waitTime));
-			}
+			await job(id, currLevel, freeLevels, username);
+			await new Promise(res => setTimeout(res, waitTime));
 
 		} else {
 			console.log(res.error)
