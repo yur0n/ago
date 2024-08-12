@@ -1,26 +1,22 @@
 import { apiPost, apiGet } from '../api.js';
 
-async function playGame(id, level, reward) {
-	const config = {
-		url: 'https://hurt-me-please-server.hexacore.io/game/event',
-		data: {  
-			agoClaimed: reward, 
-			boosted: true, 
-			level: level, 
-			transactionId: null, 
-			type: "EndGameLevelEvent"
-		},
-		auth: id
-	};
-
-	return apiPost(config)
-}
-
-async function job(id, currLevel, levels, levelsToComplete, username) {
+async function job(id, currLevel, levels, freeLevels, username) {
 	let level = currLevel;
-	for (let i = 0; i < levelsToComplete; i++) {
+	for (let i = 0; i < freeLevels; i++) {
 		const reward = levels[level].boostedAgoReward;
-		const { status, error } = await playGame(id, level, reward);
+		const config = {
+			url: 'https://hurt-me-please-server.hexacore.io/game/event',
+			data: {  
+				agoClaimed: reward, 
+				boosted: true, 
+				level: level, 
+				transactionId: null, 
+				type: "EndGameLevelEvent"
+			},
+			auth: id
+		};
+
+		const { status, error } = await apiPost(config)
 		if (status) {
 			console.log(username, 'hurtme', level, 'done!');
 			level++;
@@ -45,16 +41,14 @@ export default async function playHurtMe({ id, username }) {
 			const currLevel = data.playerState.currentGameLevel + 1;
 			const resetTime = data.playerState.sessionGameLevelsCountResetTimestamp * 1000;
 			const levels = data.gameConfig.gameLevels;
-			const levelsToComplete = freeLevels - res.data.playerState.sessionCompletedGameLevelsCount
-			if (levelsToComplete > 0) {
-				const status = await job(id, currLevel, levels, levelsToComplete, username);
-				if (!status) {
-					await new Promise(res => setTimeout(res, twoMins));
-				} 
-			} else {
-				const waitTime = resetTime - (Date.now() + twoMins)
-				await new Promise(res => setTimeout(res, waitTime));
+
+			const waitTime = resetTime - (Date.now() + twoMins)
+			await new Promise(res => setTimeout(res, waitTime));
+			const status = await job(id, currLevel, levels, freeLevels, username);
+			if (!status) {
+				await new Promise(res => setTimeout(res, twoMins));
 			}
+			
 		} else {
 			console.log(res.error)
 			await new Promise(res => setTimeout(res, twoMins));
