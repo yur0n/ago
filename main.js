@@ -1,5 +1,6 @@
 import daily from "./farmers/daily.js";
 import playHurtMe from "./farmers/hurtMe.js";
+import playDirtyJob from './farmers/dirtyJob.js'
 import mineGames from "./farmers/games.js";
 import miner from "./farmers/miner.js";
 import auth from "./auth.js";
@@ -8,18 +9,21 @@ import { User } from "./db.js";
 
 async function work(user) {
 	auth(user)
-	await new Promise(res => setTimeout(res, 10_000))
+	await new Promise(res => setTimeout(res, 5_000))
 	miner(user);
-	await new Promise(res => setTimeout(res, 30_000))
-	mineGames(user);
-	await new Promise(res => setTimeout(res, 30_000))
-	playHurtMe(user);
-	await new Promise(res => setTimeout(res, 30_000))
+	await new Promise(res => setTimeout(res, 20_000))
 	daily(user);
+	await new Promise(res => setTimeout(res, 20_000))
+	mineGames(user);
+	await new Promise(res => setTimeout(res, 20_000))
+	playHurtMe(user);
+	await new Promise(res => setTimeout(res, 20_000))
+	playDirtyJob(user);
 }
 
 async function init() {
 	const existingUsers = await User.find({});
+	
 	for (const user of existingUsers) {
 		work(user);
 		user.isNew = false;
@@ -36,7 +40,7 @@ async function checkForNewUsers() {
     work(user);
 		user.isNew = false;
 		user.save();
-		await new Promise(res => setTimeout(res, 10_000))
+		await new Promise(res => setTimeout(res, 15_000))
   }
 }
 

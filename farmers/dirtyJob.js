@@ -1,15 +1,15 @@
 import { apiPost, apiGet } from '../api.js';
 
-async function job(id, currLevel, levels, freeLevels, username) {
+async function job(id, currLevel, freeLevels, username) {
+	let jobDone = false;
 	let level = currLevel;
 	for (let i = 0; i < freeLevels; i++) {
-		const reward = levels[level].boostedAgoReward;
 		const config = {
-			url: 'https://hurt-me-please-server.hexacore.io/game/event',
+			url: 'https://dirty-job-server.hexacore.io/game/end-game-level',
 			data: {  
-				agoClaimed: reward, 
 				boosted: true, 
-				level: level, 
+				level: level,
+				playerId: id, 
 				transactionId: null, 
 				type: "EndGameLevelEvent"
 			},
@@ -18,36 +18,36 @@ async function job(id, currLevel, levels, freeLevels, username) {
 
 		const { status, error } = await apiPost(config)
 		if (status) {
-			console.log(username, 'hurtme', level, 'done!');
+			console.log(username, 'dirtyJob', level, 'done!');
 			level++;
+			jobDone = true;
 			await new Promise(res => setTimeout(res, 2000));
 		} else {
 			console.log(username, ':');
 			console.log(error);
-			return false;
+			return;
 		}
 	}
-	return true;
+	return jobDone;
 }
 
-export default async function playHurtMe({ id, username }) {
+export default async function playDirtyJob({ id, username }) {
 	const twoMins = 2 * 60 * 1000; // 2minutes
 
   while (true) {
-		const res = await apiGet({ url: 'https://hurt-me-please-server.hexacore.io/game/start', auth: id });
+		const res = await apiGet({ url: 'https://dirty-job-server.hexacore.io/game/start?playerId=' + id, auth: id });
 		if (res.data) {
 			const data = res.data;
 			const freeLevels = data.gameConfig.freeSessionGameLevelsMaxCount;
 			const currLevel = data.playerState.currentGameLevel + 1;
 			const resetTime = data.playerState.sessionGameLevelsCountResetTimestamp * 1000;
-			const levels = data.gameConfig.gameLevels;
 
 			const waitTime = resetTime - (Date.now() + twoMins)
-			const status = await job(id, currLevel, levels, freeLevels, username);
+			const status = await job(id, currLevel, freeLevels, username);
 			if (!status) {
 				await new Promise(res => setTimeout(res, waitTime));
 			}
-			
+
 		} else {
 			console.log(res.error)
 			await new Promise(res => setTimeout(res, twoMins));
