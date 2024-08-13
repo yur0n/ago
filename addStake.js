@@ -1,9 +1,9 @@
-import { apiPost, apiGet } from '../api.js';
-import { User } from '../db.js';
+import { apiPost, apiGet } from './api.js';
+import { User } from './db.js';
 
 export default async function addStake({ id, username }) {
   const waitOneHour = 60 * 60 * 1000 // 1hour
-	
+
   while (true) {
 		const user = await User.findOne({ id });
 		const res = await apiGet({ url: 'https://ago-api.hexacore.io/api/balance/' + id, auth: user.token });
