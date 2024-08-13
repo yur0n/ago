@@ -19,6 +19,10 @@ export default async function addStake({ id, username }) {
 				if (stakeAdded.status) {
 					const stakes = await apiGet({ url: 'https://ago-api.hexacore.io/api/staking/active', auth: user.token });
 					if (stakes.data) {
+						if (!stakes.data.active_stakes?.length) {
+							await new Promise(res => setTimeout(res, waitOneHour));
+							continue;
+						} 
 						const stakeSum = stakes.data.active_stakes[0].base;
 						const stakeProfit = stakes.data.active_stakes[0].revenue;
 						const completeAt = new Date(stakes.data.active_stakes[0].complete_at * 1000).toLocaleString('en-US');
