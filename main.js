@@ -4,6 +4,7 @@ import playDirtyJob from './farmers/dirtyJob.js'
 import mineGames from "./farmers/games.js";
 import miner from "./farmers/miner.js";
 import auth from "./auth.js";
+import addStake from './addStake.js'
 import { CronJob } from 'cron';
 import { User } from "./db.js";
 
@@ -19,6 +20,8 @@ async function work(user) {
 	playHurtMe(user);
 	await new Promise(res => setTimeout(res, 20_000))
 	playDirtyJob(user);
+	await new Promise(res => setTimeout(res, 60_000))
+	addStake(user)
 }
 
 async function init() {
