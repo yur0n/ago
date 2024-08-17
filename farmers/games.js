@@ -1,41 +1,36 @@
 import { apiPost } from '../api.js';
-import { User } from '../db.js';
 
-async function playGame(user, game_id) {
-  const user_id = user.id;
-  const token = user.token;
+async function playGame(user_id, game_id) {
 	const config = {
-		url: 'https://ago-api.onrender.com/api/in-game-reward',
+		url: 'https://ago-api.hexacore.io/api/in-game-reward',
 		data: { game_id, user_id },
-		auth: token
 	};
 	return apiPost(config);
 }
 
-async function job(id) {
-	const user = await User.findOne({ id });
+async function job(id, username) {
 	const games = [1,2,3,4,5]
 
 	for (let i = 0; i < games.length; i++) {
-		const { status, error } = await playGame(user, games[i]);
+		const { status, error } = await playGame(id, games[i]);
 		if (!status) {
-			console.log(user.username, ':');
+			console.log(username, ':');
 			console.log(error);
 			const lastTime = error.data?.last_reward;
 			return { status: false, lastTime: lastTime }
 		} else {
-			console.log(user.username, 'game', i + 1, 'done!')
+			console.log(username, 'game', i + 1, 'done!')
 		}
 		await new Promise(res => setTimeout(res, 2000));
 	}
 	return { status: true };
 }
 
-export default async function mineGames({ id }) {
+export default async function mineGames({ id, username }) {
   const waitTime = 12 * 60 * 60 * 1000 + 2 * 60 * 1000; // 12hours 2minutes
   const retry = 2 * 60 * 1000; // 2minutes
   while (true) {
-    const { status, lastTime } = await job(id);
+    const { status, lastTime } = await job(id, username);
 
     if (status) {
       await new Promise(res => setTimeout(res, waitTime));
