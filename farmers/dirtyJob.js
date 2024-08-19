@@ -22,15 +22,13 @@ async function job(id, currLevel, freeLevels, username) {
 			await new Promise(res => setTimeout(res, 2000));
 		} else {
 			if (error?.data?.error?.message !== 'Session completed game levels count exceeded and reset time is not reached') {
-				console.log(username, 'dirtyJob', ':');
-				console.log(error);
+				console.log(username, 'dirtyJob: ', 'Not time yet');
 			} else {
-				console.log(error);
+				console.log(username, 'dirtyJob: ', error);
 			}
-			return false
+			return
 		}
 	}
-	return true;
 }
 
 export default async function playDirtyJob({ id, username }) {
@@ -45,14 +43,10 @@ export default async function playDirtyJob({ id, username }) {
 			const resetTime = data.playerState.sessionGameLevelsCountResetTimestamp * 1000;
 
 			const waitTime = resetTime - (Date.now() + twoMins)
-			const jobDone = await job(id, currLevel, freeLevels, username);
-			if (jobDone) {
-				await new Promise(res => setTimeout(res, waitTime));
-			} else {
-				await new Promise(res => setTimeout(res, twoMins));
-			}
+			await job(id, currLevel, freeLevels, username);
+			await new Promise(res => setTimeout(res, waitTime));
 		} else {
-			console.log(res.error)
+			console.log(username, 'dirtyJob', res.error)
 			await new Promise(res => setTimeout(res, twoMins));
 		}
   }
