@@ -27,9 +27,10 @@ async function job(id, currLevel, freeLevels, username) {
 			} else {
 				console.log(error);
 			}
-			return;
+			return false
 		}
 	}
+	return true;
 }
 
 export default async function playDirtyJob({ id, username }) {
@@ -44,9 +45,12 @@ export default async function playDirtyJob({ id, username }) {
 			const resetTime = data.playerState.sessionGameLevelsCountResetTimestamp * 1000;
 
 			const waitTime = resetTime - (Date.now() + twoMins)
-			await job(id, currLevel, freeLevels, username);
-			await new Promise(res => setTimeout(res, waitTime));
-
+			const jobDone = await job(id, currLevel, freeLevels, username);
+			if (jobDone) {
+				await new Promise(res => setTimeout(res, waitTime));
+			} else {
+				await new Promise(res => setTimeout(res, twoMins));
+			}
 		} else {
 			console.log(res.error)
 			await new Promise(res => setTimeout(res, twoMins));

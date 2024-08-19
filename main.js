@@ -48,3 +48,7 @@ async function checkForNewUsers() {
 }
 
 new CronJob('* */30 * * * *', checkForNewUsers, null, true, 'America/Los_Angeles');
+
+
+
+// ADD: auto restake, auto create stake, auto hurt me init, auto lvl up;   CHNAGE: add stake from 1 hour to 3+ hours

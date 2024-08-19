@@ -25,10 +25,13 @@ async function job(id, currLevel, levels, freeLevels, username) {
 			if (error.data.error.message !== 'Session completed game levels count exceeded and reset time is not reached') {
 				console.log(username, 'hurtMe',  ':');
 				console.log(error);
+			} else {
+				console.log(error);
 			}
-			return;
+			return false;
 		}
 	}
+	return true;
 }
 
 export default async function playHurtMe({ id, username }) {
@@ -44,8 +47,12 @@ export default async function playHurtMe({ id, username }) {
 			const levels = data.gameConfig.gameLevels;
 
 			const waitTime = resetTime - (Date.now() + twoMins)
-			await job(id, currLevel, levels, freeLevels, username);
-			await new Promise(res => setTimeout(res, waitTime));
+			const jobDone = await job(id, currLevel, levels, freeLevels, username);
+			if (jobDone) {
+				await new Promise(res => setTimeout(res, waitTime));
+			} else {
+				await new Promise(res => setTimeout(res, twoMins));
+			}
 			
 		} else {
 			console.log(res.error)
