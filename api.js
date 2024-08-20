@@ -23,7 +23,9 @@ export async function apiPost({ url, data, auth, id }) {
     }
 	} catch (e) {
 		if (e.response?.data?.error == 'Unauthorized') {
-			bot.api.sendMessage(id, `Please, update Token for ${id}`)
+			try {
+				await bot.api.sendMessage(id, `Please, update Token for ${id}`)
+			} catch (e) {}
 		}
 		error = {
 			msg: 'ERROR fetching',
@@ -55,7 +57,9 @@ export async function apiGet({ url, auth, id }) {
     }
 	} catch (e) {
 		if (e.response?.data?.error == 'Unauthorized') {
-			bot.api.sendMessage(id, `Please, update Token for ${id}`)
+			try {
+				await bot.api.sendMessage(id, `Please, update Token for ${id}`)
+			} catch (e) {}
 		}
 		error = {
 			msg: 'ERROR fetching',
