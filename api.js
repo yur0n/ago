@@ -1,6 +1,7 @@
 import axios from "axios";
+import { bot } from './bot.js'
 
-export async function apiPost({ url, data, auth }) {
+export async function apiPost({ url, data, auth, id }) {
 	const config = {
 		method: 'post',
 		url,
@@ -21,6 +22,9 @@ export async function apiPost({ url, data, auth }) {
 			}
     }
 	} catch (e) {
+		if (e.response?.data?.error == 'Unauthorized') {
+			bot.api.sendMessage(id, `Please, update Token for ${id}`)
+		}
 		error = {
 			msg: 'ERROR fetching',
 			status: e.response?.status,
@@ -30,7 +34,7 @@ export async function apiPost({ url, data, auth }) {
 	return { status, error };
 }
 
-export async function apiGet({ url, auth }) {
+export async function apiGet({ url, auth, id }) {
 	const config = {
 		method: 'get',
 		url,
@@ -50,6 +54,9 @@ export async function apiGet({ url, auth }) {
 			}
     }
 	} catch (e) {
+		if (e.response?.data?.error == 'Unauthorized') {
+			bot.api.sendMessage(id, `Please, update Token for ${id}`)
+		}
 		error = {
 			msg: 'ERROR fetching',
 			status: e.response?.status,

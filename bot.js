@@ -2,7 +2,7 @@
 import { User } from './db.js'
 import { Bot } from "grammy";
 
-const bot = new Bot(process.env.BOT);
+export const bot = new Bot(process.env.BOT);
 
 bot.command("start", (ctx) => ctx.reply("Welcome!"));
 

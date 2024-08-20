@@ -13,7 +13,8 @@ async function job(id, currLevel, levels, freeLevels, username) {
 				transactionId: null, 
 				type: "EndGameLevelEvent"
 			},
-			auth: id
+			auth: id,
+			id
 		};
 
 		const { status, error } = await apiPost(config)
@@ -37,7 +38,7 @@ export default async function playHurtMe({ id, username }) {
 	const fiveMins = 5 * 60 * 1000
 
   while (true) {
-		const res = await apiGet({ url: 'https://hurt-me-please-server.hexacore.io/game/start', auth: id });
+		const res = await apiGet({ url: 'https://hurt-me-please-server.hexacore.io/game/start', auth: id, id });
 		if (res.data) {
 			const data = res.data;
 			const freeLevels = data.gameConfig.freeSessionGameLevelsMaxCount;

@@ -6,18 +6,19 @@ export default async function addStake({ id, username }) {
 
   while (true) {
 		const user = await User.findOne({ id });
-		const res = await apiGet({ url: 'https://ago-api.hexacore.io/api/balance/' + id, auth: user.token });
+		const res = await apiGet({ url: 'https://ago-api.hexacore.io/api/balance/' + id, auth: user.token, id });
 		if (res.data) {
 			const balance = res.data.balance;
 			if (balance > 0) {
 				const config = {
 					url: 'https://ago-api.hexacore.io/api/staking/add-base',
 					data: { amount: balance, type: "month" },
-					auth: user.token
+					auth: user.token,
+					id
 				};
 				const stakeAdded = await apiPost(config);
 				if (stakeAdded.status) {
-					const stakes = await apiGet({ url: 'https://ago-api.hexacore.io/api/staking/active', auth: user.token });
+					const stakes = await apiGet({ url: 'https://ago-api.hexacore.io/api/staking/active', auth: user.token, id });
 					if (stakes.data) {
 						if (!stakes.data.active_stakes?.length) {
 							await new Promise(res => setTimeout(res, waitOneHour));

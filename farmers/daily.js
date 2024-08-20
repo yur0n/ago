@@ -7,14 +7,15 @@ export default async function daily({ id, username }) {
 
   while (true) {
 		const user = await User.findOne({ id });
-		const res = await apiGet({ url: 'https://ago-api.hexacore.io/api/daily-checkin', auth: user.token });
+		const res = await apiGet({ url: 'https://ago-api.hexacore.io/api/daily-checkin', auth: user.token, id });
 		if (res.data) {
 			if (res.data.is_available) {
         const day = res.data.next
         const config = {
           url: 'https://ago-api.hexacore.io/api/daily-checkin',
           data: { day },
-          auth: user.token
+          auth: user.token,
+					id
         };
 				const { status, error } = await apiPost(config)
 				if (status) {

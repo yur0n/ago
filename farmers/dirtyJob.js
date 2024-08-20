@@ -12,7 +12,8 @@ async function job(id, currLevel, freeLevels, username) {
 				transactionId: null, 
 				type: "EndGameLevelEvent"
 			},
-			auth: id
+			auth: id,
+			id
 		};
 
 		const { status, error } = await apiPost(config)
@@ -36,7 +37,7 @@ export default async function playDirtyJob({ id, username }) {
 	const fiveMins = 5 * 60 * 1000
 
   while (true) {
-		const res = await apiGet({ url: 'https://dirty-job-server.hexacore.io/game/start?playerId=' + id, auth: id });
+		const res = await apiGet({ url: 'https://dirty-job-server.hexacore.io/game/start?playerId=' + id, auth: id, id });
 		if (res.data) {
 			const data = res.data;
 			const freeLevels = data.gameConfig.freeSessionGameLevelsMaxCount;

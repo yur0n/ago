@@ -8,14 +8,15 @@ export default async function miner({ id, username }) {
 
   while (true) {
 		const user = await User.findOne({ id });
-		const res = await apiGet({ url: 'https://ago-api.hexacore.io/api/available-taps', auth: user.token });
+		const res = await apiGet({ url: 'https://ago-api.hexacore.io/api/available-taps', auth: user.token, id });
 		if (res.data) {
 			const taps = res.data.available_taps;
 			if (taps > 0) {
 				const config = {
 					url: 'https://ago-api.hexacore.io/api/mining-complete',
 					data: { taps },
-					auth: user.token
+					auth: user.token,
+					id
 				};
 				const { status, error } = await apiPost(config);
 				if (status) {
