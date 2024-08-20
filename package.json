@@ -10,7 +10,7 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "start": "node --env-file=.env main.js"
+    "start": "node --env-file=./ago/.env main.js"
   },
   "keywords": [],
   "author": "",
