@@ -7,9 +7,11 @@ const bot = new Bot(process.env.BOT);
 bot.command("start", (ctx) => ctx.reply("Welcome!"));
 
 bot.on("message", (ctx) => {
-	const user = User.findOne({ id: ctx.chatId })
+	const [username, token] = ctx.msg
+	const user = User.findOne({ username })
 	if (!user) return ctx.reply('User not found')
-	user.token = ctx.msg
+	user.token = token
+	user.save()
 	ctx.reply("Token saved!")
 });
 
