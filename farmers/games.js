@@ -4,7 +4,7 @@ async function playGame(user_id, game_id) {
 	const config = {
 		url: 'https://ago-api.hexacore.io/api/in-game-reward',
 		data: { game_id, user_id },
-		id
+		id: user_id
 	};
 	return apiPost(config);
 }
