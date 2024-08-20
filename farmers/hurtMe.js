@@ -22,7 +22,7 @@ async function job(id, currLevel, levels, freeLevels, username) {
 			level++;
 			await new Promise(res => setTimeout(res, 2000));
 		} else {
-			if (error.data.error.message !== 'Session completed game levels count exceeded and reset time is not reached') {
+			if (error.data.error.message == 'Session completed game levels count exceeded and reset time is not reached') {
 				console.log(username, 'hurtMe:',  'not time yet');
 			} else {
 				console.log(username, 'hurtMe:',error);
@@ -34,6 +34,7 @@ async function job(id, currLevel, levels, freeLevels, username) {
 
 export default async function playHurtMe({ id, username }) {
 	const twoMins = 2 * 60 * 1000; // 2minutes
+	const fiveMins = 5 * 60 * 1000
 
   while (true) {
 		const res = await apiGet({ url: 'https://hurt-me-please-server.hexacore.io/game/start', auth: id });
@@ -44,7 +45,7 @@ export default async function playHurtMe({ id, username }) {
 			const resetTime = data.playerState.sessionGameLevelsCountResetTimestamp * 1000;
 			const levels = data.gameConfig.gameLevels;
 
-			const waitTime = resetTime - (Date.now() + twoMins)
+			const waitTime = resetTime - (Date.now() + fiveMins)
 			await job(id, currLevel, levels, freeLevels, username);
 			await new Promise(res => setTimeout(res, waitTime));
 		} else {

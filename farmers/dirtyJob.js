@@ -33,6 +33,7 @@ async function job(id, currLevel, freeLevels, username) {
 
 export default async function playDirtyJob({ id, username }) {
 	const twoMins = 2 * 60 * 1000; // 2minutes
+	const fiveMins = 5 * 60 * 1000
 
   while (true) {
 		const res = await apiGet({ url: 'https://dirty-job-server.hexacore.io/game/start?playerId=' + id, auth: id });
@@ -42,7 +43,7 @@ export default async function playDirtyJob({ id, username }) {
 			const currLevel = data.playerState.currentGameLevel + 1;
 			const resetTime = data.playerState.sessionGameLevelsCountResetTimestamp * 1000;
 
-			const waitTime = resetTime - (Date.now() + twoMins)
+			const waitTime = resetTime - (Date.now() + fiveMins)
 			await job(id, currLevel, freeLevels, username);
 			await new Promise(res => setTimeout(res, waitTime));
 		} else {
