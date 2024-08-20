@@ -7,10 +7,11 @@ import auth from "./auth.js";
 import addStake from './addStake.js'
 import { CronJob } from 'cron';
 import { User } from "./db.js";
+import './bot.js'
 
 async function work(user) {
-	auth(user)
-	await new Promise(res => setTimeout(res, 5_000))
+	// auth(user)
+	// await new Promise(res => setTimeout(res, 5_000))
 	miner(user);
 	await new Promise(res => setTimeout(res, 20_000))
 	daily(user);
