@@ -44,7 +44,7 @@ export default async function playDirtyJob({ id, username }) {
 			const currLevel = data.playerState.currentGameLevel + 1;
 			const resetTime = data.playerState.sessionGameLevelsCountResetTimestamp * 1000;
 
-			const waitTime = resetTime - (Date.now() + fiveMins)
+			const waitTime = (resetTime - Date.now()) + twoMins
 			await job(id, currLevel, freeLevels, username);
 			await new Promise(res => setTimeout(res, waitTime));
 		} else {

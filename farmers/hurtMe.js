@@ -46,7 +46,7 @@ export default async function playHurtMe({ id, username }) {
 			const resetTime = data.playerState.sessionGameLevelsCountResetTimestamp * 1000;
 			const levels = data.gameConfig.gameLevels;
 
-			const waitTime = resetTime - (Date.now() + fiveMins)
+			const waitTime = (resetTime - Date.now()) + twoMins
 			await job(id, currLevel, levels, freeLevels, username);
 			await new Promise(res => setTimeout(res, waitTime));
 		} else {
