@@ -34,7 +34,7 @@ async function job(id, currLevel, freeLevels, username) {
 
 export default async function playDirtyJob({ id, username }) {
 	const twoMins = 2 * 60 * 1000; // 2minutes
-	const fiveMins = 5 * 60 * 1000
+	const day = 24 * 60 * 60 * 1000
 
   while (true) {
 		const res = await apiGet({ url: 'https://dirty-job-server.hexacore.io/game/start?playerId=' + id, auth: id, id });
@@ -43,8 +43,13 @@ export default async function playDirtyJob({ id, username }) {
 			const freeLevels = data.gameConfig.freeSessionGameLevelsMaxCount;
 			const currLevel = data.playerState.currentGameLevel + 1;
 			const resetTime = data.playerState.sessionGameLevelsCountResetTimestamp * 1000;
-
 			const waitTime = (resetTime - Date.now()) + twoMins
+
+			if (currLevel == 221) {
+				await new Promise(res => setTimeout(res, day))
+				console.log(`${username}: HURTME LVL LIMIT WAITING 1 day`)
+				continue;
+			}
 			await job(id, currLevel, freeLevels, username);
 			await new Promise(res => setTimeout(res, waitTime));
 		} else {

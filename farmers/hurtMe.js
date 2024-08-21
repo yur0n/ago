@@ -35,7 +35,7 @@ async function job(id, currLevel, levels, freeLevels, username) {
 
 export default async function playHurtMe({ id, username }) {
 	const twoMins = 2 * 60 * 1000; // 2minutes
-	const fiveMins = 5 * 60 * 1000
+	const day = 24 * 60 * 60 * 1000
 
   while (true) {
 		const res = await apiGet({ url: 'https://hurt-me-please-server.hexacore.io/game/start', auth: id, id });
@@ -45,8 +45,13 @@ export default async function playHurtMe({ id, username }) {
 			const currLevel = data.playerState.currentGameLevel + 1;
 			const resetTime = data.playerState.sessionGameLevelsCountResetTimestamp * 1000;
 			const levels = data.gameConfig.gameLevels;
-
 			const waitTime = (resetTime - Date.now()) + twoMins
+
+			if (currLevel == 1001) {
+				await new Promise(res => setTimeout(res, day))
+				console.log(`${username}: HURTME LVL LIMIT WAITING 1 day`)
+				continue;
+			}
 			await job(id, currLevel, levels, freeLevels, username);
 			await new Promise(res => setTimeout(res, waitTime));
 		} else {

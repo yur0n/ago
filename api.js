@@ -16,7 +16,7 @@ export async function apiPost({ url, data, auth, id }) {
       status = true;
     } else {
 			error = {
-				msg: 'ERROR in response: ',
+				msg: `ERROR in response ${id}`,
 				status: res.status,
 				data: res.data
 			}
@@ -28,7 +28,7 @@ export async function apiPost({ url, data, auth, id }) {
 			} catch (e) {}
 		}
 		error = {
-			msg: 'ERROR fetching',
+			msg: `ERROR fetching ${id}`,
 			status: e.response?.status,
 			data: e.response?.data
 		}
@@ -50,7 +50,7 @@ export async function apiGet({ url, auth, id }) {
 			data = res.data
     } else {
 			error = {
-				msg: 'ERROR in response: ',
+				msg: `ERROR in response ${id}`,
 				status: res.status,
 				data: res.data
 			}
@@ -62,7 +62,7 @@ export async function apiGet({ url, auth, id }) {
 			} catch (e) {}
 		}
 		error = {
-			msg: 'ERROR fetching',
+			msg: `ERROR fetching ${id}`,
 			status: e.response?.status,
 			data: e.response?.data
 		}
