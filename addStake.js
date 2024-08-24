@@ -27,7 +27,8 @@ export default async function addStake({ id, username }) {
 						if (stakeRestake.status) {
 							console.log(`${username}: STAKE BEEN RESTAKED`);
 						} else {
-							console.log(`${username}: ERROR RESTAKING STAKE: ${stakeRestake.error}`);
+							console.log(`${username}: ERROR RESTAKING STAKE:`);
+							console.log(stakeRestake.error)
 						}
 						await new Promise(res => setTimeout(res, waitOneHour));
 						continue;
@@ -47,7 +48,8 @@ export default async function addStake({ id, username }) {
 							console.log(`${username}: +${balance} to stake! Balance: ${total}, profit: ${revenue}, complete at: ${completeAt}'`)
 							await new Promise(res => setTimeout(res, waitThreeHours));
 						} else {
-							console.log(`${username}: ADD STAKE ERROR: ${stakeAdded.error}`);
+							console.log(`${username}: ADD STAKE ERROR:`);
+							console.log(stakeAdded.error)
 							await new Promise(res => setTimeout(res, waitOneHour));
 						}
 					} else {
@@ -62,12 +64,14 @@ export default async function addStake({ id, username }) {
 							console.log(`${username}: NEW STAKE CREATED`);
 							await new Promise(res => setTimeout(res, twoMins));
 						} else {
-							console.log(`${username}: STAKE CREATE ERROR: ${stakeCreated.error}`);
+							console.log(`${username}: STAKE CREATE ERROR:`);
+							console.log(stakeCreated.error)
 							await new Promise(res => setTimeout(res, waitOneHour));
 						}
 					}
 				} else {
-					console.log(`${username}: ERROR getting info about stakes: ${activeStakes.error}`);
+					console.log(`${username}: ERROR getting info about stakes:`);
+					console.log(activeStakes.error)
 					await new Promise(res => setTimeout(res, waitOneHour));
 				}
 
@@ -75,7 +79,8 @@ export default async function addStake({ id, username }) {
 				await new Promise(res => setTimeout(res, waitOneHour));
 			}
 		} else {
-			console.log(`${username}: ERROR getting balance for stakes: ${activeStakes.error}`);
+			console.log(`${username}: ERROR getting balance for stakes:`);
+			console.log(activeStakes.error)
 			await new Promise(res => setTimeout(res, waitOneHour));
 		}
   }

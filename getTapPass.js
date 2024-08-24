@@ -23,13 +23,15 @@ export default async function getTapPass({ id, username }) {
 			};
 			const tapPass = await apiPost(config);
 			if (tapPass.error) {
-				console.log(`${username}: TAP PASS ERROR: ${tapPass.error}`);
+				console.log(`${username}: TAP PASS ERROR:`);
+				console.log(tapPass.error)
 				await new Promise(res => setTimeout(res, waitOneHour));
 			} else {
 				console.log(`${username}: GOT TAP PASS`);
 			}
 		} else {
-			console.log(`${username}: TAP PASS ERROR: ${res.error}`);
+			console.log(`${username}: TAP PASS ERROR:`);
+			console.log(res.error)
 			await new Promise(res => setTimeout(res, waitOneHour));
 		}
   }
