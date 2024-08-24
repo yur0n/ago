@@ -5,6 +5,7 @@ import mineGames from "./farmers/games.js";
 import miner from "./farmers/miner.js";
 import auth from "./auth.js";
 import addStake from './addStake.js'
+import getTapPass from './getTapPass.js'
 import { CronJob } from 'cron';
 import { User } from "./db.js";
 import './bot.js'
@@ -12,6 +13,8 @@ import './bot.js'
 async function work(user) {
 	// auth(user)
 	// await new Promise(res => setTimeout(res, 5_000))
+	getTapPass(user);
+	await new Promise(res => setTimeout(res, 20_000))
 	miner(user);
 	await new Promise(res => setTimeout(res, 20_000))
 	daily(user);
