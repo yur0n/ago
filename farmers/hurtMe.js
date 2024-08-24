@@ -3,7 +3,7 @@ import { apiPost, apiGet } from '../api.js';
 async function job(id, currLevel, levels, freeLevels, username) {
 	let level = currLevel;
 	for (let i = 0; i < freeLevels; i++) {
-		const reward = levels[level].boostedAgoReward;
+		const reward = level <= 1000 ? levels[level].boostedAgoReward : levels[1000].boostedAgoReward;
 		const config = {
 			url: 'https://hurt-me-please-server.hexacore.io/game/event',
 			data: {  
@@ -47,11 +47,6 @@ export default async function playHurtMe({ id, username }) {
 			const levels = data.gameConfig.gameLevels;
 			const waitTime = (resetTime - Date.now()) + twoMins
 
-			if (currLevel == 1001) {
-				await new Promise(res => setTimeout(res, day))
-				console.log(`${username}: HURTME LVL LIMIT WAITING 1 day`)
-				continue;
-			}
 			await job(id, currLevel, levels, freeLevels, username);
 			await new Promise(res => setTimeout(res, waitTime));
 		} else {
