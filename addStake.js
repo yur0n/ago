@@ -16,7 +16,7 @@ export default async function addStake({ id, username }) {
 				if (activeStakes.data) {
 					const activeStake = activeStakes.data.active_stakes[0]
 					const completeAt = activeStake?.complete_at * 1000;
-					if (Date.now() - completeAt < 1000) {
+					if ((Date.now() - completeAt) > 1000) {
 						const config = {
 							url: 'https://ago-api.hexacore.io/api/staking/add-base',
 							data: { type: "month" },
