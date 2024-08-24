@@ -7,7 +7,8 @@ export default async function getTapPass({ id, username }) {
 
   while (true) {
 		const user = await User.findOne({ id });
-		const res = await apiGet({ url: 'https://ago-api.hexacore.io/api/get-tap-passes/', auth: user.token, id });
+
+		const res = await apiGet({ url: 'https://ago-api.hexacore.io/api/get-tap-passes', auth: user.token, id });
 		if (res.data) {
 			const activeTapPass = res.data.active_tap_pass;
 			if (activeTapPass) {
