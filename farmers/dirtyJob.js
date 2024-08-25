@@ -47,7 +47,7 @@ export default async function playDirtyJob({ id, username }) {
 
 			if (currLevel == 221) {
 				await new Promise(res => setTimeout(res, day))
-				console.log(`${username}: HURTME LVL LIMIT WAITING 1 day`)
+				console.log(`${username}: DIRTYJOB LVL LIMIT WAITING 1 day`)
 				continue;
 			}
 			await job(id, currLevel, freeLevels, username);
