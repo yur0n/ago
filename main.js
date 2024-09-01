@@ -15,8 +15,8 @@ async function work(user) {
 	// await new Promise(res => setTimeout(res, 5_000))
 	getTapPass(user);
 	await new Promise(res => setTimeout(res, 20_000))
-	miner(user);
-	await new Promise(res => setTimeout(res, 20_000))
+	// miner(user);
+	// await new Promise(res => setTimeout(res, 20_000))
 	daily(user);
 	await new Promise(res => setTimeout(res, 20_000))
 	mineGames(user);
