@@ -58,10 +58,10 @@ async function miner(user, id) {
 				};
 				const { status, error } = await apiPost(config);
 				if (status) {
-					console.log(username, 'taps done!')
+					console.log(user.username, 'taps done!')
 					return true;
 				} else {
-					console.log(username, ':');
+					console.log(user.username, ':');
 					console.log(error);
 					return false;
 				}
