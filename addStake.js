@@ -4,7 +4,7 @@ import { User } from './db.js';
 export default async function addStake({ id, username }) {
 	const twoMins = 2 * 60 * 1000;
   const waitOneHour = 60 * 60 * 1000 // 1hour
-	const waitThreeHours = 3 * 60 * 60 * 1000
+	const waitThreeHours = 6 * 60 * 60 * 1000 // 6 hours
 
   while (true) {
 		const user = await User.findOne({ id });
