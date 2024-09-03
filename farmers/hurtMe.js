@@ -42,13 +42,16 @@ export default async function playHurtMe({ id, username }) {
 		if (res.data) {
 			const data = res.data;
 			const freeLevels = data.gameConfig.freeSessionGameLevelsMaxCount;
+			const completedLevels = data.playerState.sessionCompletedGameLevelsCount
 			const currLevel = data.playerState.currentGameLevel + 1;
 			const resetTime = data.playerState.sessionGameLevelsCountResetTimestamp * 1000;
 			const levels = data.gameConfig.gameLevels;
 			const waitTime = (resetTime - Date.now()) + twoMins
 
+			if (completedLevels >= freeLevels) {
+				await new Promise(res => setTimeout(res, waitTime));
+			}
 			await job(id, currLevel, levels, freeLevels, username);
-			await new Promise(res => setTimeout(res, waitTime));
 		} else {
 			console.log(username, 'hurtMe:', res.error)
 			await new Promise(res => setTimeout(res, twoMins));
