@@ -45,7 +45,7 @@ export default async function addStake({ id, username }) {
 						};
 						const stakeAdded = await apiPost(config);
 						if (stakeAdded.status) {
-							console.log(`${username}: +${balance} to stake! Balance: ${total}, profit: ${revenue}, complete at: ${completeAt}'`)
+							console.log(`${username}: +${balance} to stake! Balance: ${total}, profit: ${revenue}, complete at: ${new Date(completeAt).toLocaleDateString()}'`)
 							await new Promise(res => setTimeout(res, waitThreeHours));
 						} else {
 							console.log(`${username}: ADD STAKE ERROR:`);
