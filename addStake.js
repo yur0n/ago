@@ -80,7 +80,7 @@ export default async function addStake({ id, username }) {
 			}
 		} else {
 			console.log(`${username}: ERROR getting balance for stakes:`);
-			console.log(activeStakes.error)
+			console.log(res.error)
 			await new Promise(res => setTimeout(res, waitOneHour));
 		}
   }

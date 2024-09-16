@@ -24,8 +24,8 @@ async function work(user) {
 	playHurtMe(user);
 	await new Promise(res => setTimeout(res, 20_000))
 	playDirtyJob(user);
-	await new Promise(res => setTimeout(res, 60_000))
-	addStake(user)
+	// await new Promise(res => setTimeout(res, 60_000))
+	// addStake(user)
 }
 
 async function init() {
